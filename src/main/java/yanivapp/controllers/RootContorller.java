@@ -17,5 +17,4 @@ public class RootContorller {
 		model.addAttribute("user", new User());
 		return "index";
 	}
-	
 }

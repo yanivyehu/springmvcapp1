@@ -44,6 +44,6 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "\n[id:" + this.id + ",name:" + this. name + ",password:" + this.password +"]\n";
+		return " [id:" + this.id + ",name:" + this. name + ",password:" + this.password +"]";
 	}
 }

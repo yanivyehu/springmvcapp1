@@ -4,28 +4,59 @@
 
 	<display-name>Spring Web MVC Hello World Application</display-name>
 
-	<!-- needed for ContextLoaderListener -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/front-servlet.xml</param-value>
-	</context-param>
+    <!-- Note: NOT a spring configuration!
+         The listener configuration defines a class that listens to special event during web application start up.
+         In this specific case, creates a web application context based on the "contextClass" and "contextConfigLocation" servlet context-params.
+         "creates a web application context" = starts Spring container. reads that file, finds your classes, instantiates them and wires. All your beans are then placed inside a container.
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener> -->
+   
+    <!-- My version of context load listener to understand when it runs -->
+    <listener>
+        <listener-class>myContextLoaderListener</listener-class>
+    </listener>
 
-	<!-- Bootstraps the root web application context before servlet initialization -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	
+	<!-- under context-param we can declare settings that are shared across all the servlets 
+	    practically, this is a setting that is saved is ServeltContext object (which is an object that contains information across all requests/session/users..).
+	    a better name for this is "servlet-context-param" meaning any servlet uses this information.	
+	    In this sepcific case we declare where is the context configuration. 
+	-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/root-context.xml</param-value>
+    </context-param>
+    
 	<servlet>
-			<servlet-name>front</servlet-name>
-				<servlet-class>
-					org.springframework.web.servlet.DispatcherServlet
-				</servlet-class>
-			<load-on-startup>1</load-on-startup>
+		<servlet-name>app</servlet-name>
+			<servlet-class>
+				org.springframework.web.servlet.DispatcherServlet
+			</servlet-class>
+			<init-param>
+           		 <param-name>contextConfigLocation</param-name>
+            	 <param-value>/WEB-INF/root-context.xml</param-value>
+        	</init-param>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>front</servlet-name>
+		<servlet-name>app</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 </web-app>
+
+<!-- Summary of the process that happens here:
+
+The web.xml is a configuration file to the servlet-container, in this case APACHE-TOMCAT.
+This is the configuration file of web applications in java. It instructs the servlet container (tomcat for ex.) 
+which classes to load, what parameters to set in the context, and how to intercept requests coming from browsers.
+
+When tomcat is running is getting this file and start working:
+1. configuring context load listener -> which will create the web application context for the application.
+2. configuring 'contextConfigLocation' parameter in Servlet context.
+3. configuring dispatcher servlet (from spring framework) and relates it to work with the web application context defined in the xml (i.e: which beans to use, where to scan for annotations, etc)
+
+Comparison to regular Spring JAVA APP:
+in a regular app we have an application context (created from xml), then we use this context during the app.
+in spring web application, the servlet dispatcher (front controller) is the one that using the annotations to know which class to use when.
+ -->
