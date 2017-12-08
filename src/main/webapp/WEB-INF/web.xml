@@ -4,6 +4,17 @@
 
 	<display-name>Spring Web MVC Hello World Application</display-name>
 
+	<!-- needed for ContextLoaderListener -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/front-servlet.xml</param-value>
+	</context-param>
+
+	<!-- Bootstraps the root web application context before servlet initialization -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
 	<servlet>
 			<servlet-name>front</servlet-name>
 				<servlet-class>
@@ -11,7 +22,7 @@
 				</servlet-class>
 			<load-on-startup>1</load-on-startup>
 	</servlet>
-		
+
 	<servlet-mapping>
 		<servlet-name>front</servlet-name>
 		<url-pattern>/</url-pattern>

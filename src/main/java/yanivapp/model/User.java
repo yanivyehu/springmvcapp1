@@ -1,4 +1,4 @@
-package yanivapp.beans;
+package yanivapp.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +18,9 @@ public class User {
 //		this.password=password;
 //	}
 	
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public int getId() {
 		return id;
@@ -41,6 +44,6 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "id:" + this.id + ",name:" + this. name + ",password:" + this.password;
+		return "\n[id:" + this.id + ",name:" + this. name + ",password:" + this.password +"]\n";
 	}
 }
